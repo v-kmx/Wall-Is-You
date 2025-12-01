@@ -6,6 +6,8 @@ Projet : Wall Is You
 Groupe 8 : KITADI MUNDUNGA Vianney, PENNETIER-MSIKA Elie, DIOURI-ADEQUIN Noam
 
 /!\ Le fichier à executer pour lancer le jeu est main_handler.py /!\\
+
+
 Ce projet a pour objectif de nous faire réaliser une structure de jeu avec des menues des sauvegardes.
 
 Nous avons décidé de séparer le programme en deux sous-programmes, une partie qui se charge des menues et l'autre qui se charge du jeu.
