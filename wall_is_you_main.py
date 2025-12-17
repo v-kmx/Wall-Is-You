@@ -172,20 +172,40 @@ def init_carte(longueur_carte,hauteur_carte):
             init_case((i,j),carte)
     return carte
 
-def test_dragon(carte):
+def test_objets(carte):
     """
     cette fonction test toutes les cases et renvoies les informations de celle
-    qui contiennent un dragon
-    pour référence renvoi : (position i,position j, information sur la case contenant le dragon)
+    qui contiennent un dragon et celles qui contiennent des trésors
+    pour référence renvoi : (position i,position j, information sur la case contenant l'objet)
     """
     compte_dragon=[0]
+    compte_tresor=[0]
     for i in range(len(carte)):
         for j in range(len(carte[i])):
-            if carte[i][j][1]:
+            if carte[i][j][1] and carte[i][j][1]>=1:
                 compte_dragon[0]+=1
                 compte_dragon.append((i,j,carte[i][j][1]))
-    return compte_dragon
-                
+            elif carte[i][j][1] and carte[i][j][1]<0:
+                compte_tresor[0]+=1
+                compte_tresor.append((i,j,carte[i][j][1]))
+    return compte_dragon,compte_tresor
+
+
+def encode_case(carte):
+    """
+    encode les informations des cases de la carte et les renvois
+    (l'encodage correspond au symbole boite)
+    (ne prend pas en compte les dragons le hero ou les objets)
+    """
+    traduction_box2={(True,False,False,False):u'\u2561',(False,True,False,False):u'\u2568',(False,False,True,False):u'\u2565',(False,False,False,True):u'\u255E',(True,False,False,True):u'\u2550',(False,True,True,False):u'\u2551',(False,False,True,True):u'\u2554',(True,False,True,False):u'\u2557',(False,True,False,True):u'\u255A',(True,True,False,False):u'\u255D',(False,True,True,True):u'\u2560',(True,True,True,False):u'\u2563',(True,False,True,True):u'\u2566',(True,True,False,True):u'\u2569',(True,True,True,True):u'\u256C'}
+    carte_encode=list()
+    for i in range(len(carte)):
+        carte_encode.append(list())
+        for j in range(len(carte[0])):
+            carte_encode[i].append(traduction_box2[tuple(carte[i][j][0])])
+    return carte_encode
+
+
 def sauvegarde(carte,intention,aventurier):
     """
     sauvegarde l'état de la carte actuelle dans un fichier text
@@ -195,6 +215,31 @@ def sauvegarde(carte,intention,aventurier):
     les informations des cases (position,dragon,sorties)
     la taille de la carte
     l'intention
+    """
+    fichier_sauvegarde=open("save/sauvegarde_dernier_donjon","w")
+    carte_encode=encode_case(carte)
+    for ligne in carte_encode:
+        for case in ligne:
+            fichier_sauvegarde.write(case)
+        fichier_sauvegarde.write("\n")
+    fichier_sauvegarde.write("\n")
+    fichier_sauvegarde.write("A "+str(aventurier[0][0])+" "+str(aventurier[0][1])+" "+str(aventurier[1])+'\n')
+    fichier_sauvegarde.write("\n")
+    for position in intention:
+        fichier_sauvegarde.write("I "+str(position[0])+" "+str(position[1])+"\n")
+    fichier_sauvegarde.write("\n")
+    dragons,tresors=test_objets(carte)
+    for dragon in dragons:
+        if type(dragon)==int:
+            continue
+        fichier_sauvegarde.write("D "+str(dragon[0])+" "+str(dragon[1])+" "+str(dragon[2])+"\n")
+    fichier_sauvegarde.write("\n")
+    for tresor in tresors:
+        if type(tresor)==int:
+            continue
+        fichier_sauvegarde.write("T "+str(tresor[0])+" "+str(tresor[1])+" "+str(tresor[2])+'\n')
+    fichier_sauvegarde.write("\n")
+    
     """
     saut_categorie="\n"
     fichier_sauvegarde=open("sauvegarde_dernier_donjon","w")
@@ -221,91 +266,115 @@ def sauvegarde(carte,intention,aventurier):
             else:
                 fichier_sauvegarde.write(","+str(carte[i][j][1])+"\n")
     fichier_sauvegarde.write("\n")
+    #"""
+    
+    
+def decode_cases(case_encode):
+    """
+    decodes les informations des cases de la carte et les renvois
+    (le decodage correspondant au symbole boite traduit en sortie)
+    (ne prend pas en compte les dragons le hero ou les objets)
+    """
+    traduction_box2={u'\u2561':(True,False,False,False),u'\u2568':(False,True,False,False),u'\u2565':(False,False,True,False),u'\u255E':(False,False,False,True),u'\u2550':(True,False,False,True),u'\u2551':(False,True,True,False),u'\u2554':(False,False,True,True),u'\u2557':(True,False,True,False),u'\u255A':(False,True,False,True),u'\u255D':(True,True,False,False),u'\u2560':(False,True,True,True),u'\u2563':(True,True,True,False),u'\u2566':(True,False,True,True),u'\u2569':(True,True,False,True),u'\u256C':(True,True,True,True)}
+    return traduction_box2[case_encode]
+
 
 def recuperer_int(chaine):
     """
     renvoie le premier chiffre qu'il trouve et l'indice ou il s'est arreter
     (un chiffre est considerer comme une suite de numero et il renvoi
     la premiere suite de numéro qu'il croise)
+    si il n'en croise aucune, il renvoi (None,None)
     """
     chiffre=""
     indice_caractere=0
-    while indice_caractere<len(chaine) and chaine[indice_caractere].isdigit():
-        chiffre+=chaine[indice_caractere]
-        indice_caractere+=1
-    if indice_caractere==len(chaine)-1:
-        return int(chiffre),indice_caractere
-    return int(chiffre),indice_caractere+1
+    repetition=0
+    for i in range(len(chaine)):
+        if chaine[indice_caractere].isdigit():
+            while indice_caractere<len(chaine) and chaine[indice_caractere].isdigit():
+                chiffre+=chaine[indice_caractere]
+                indice_caractere+=1
+                repetition+=1
+            if indice_caractere==len(chaine)-1:
+                return int(chiffre),indice_caractere
+            return int(chiffre),indice_caractere+1
+        else:
+            indice_caractere+=1
+    return None,None
 
-def recuperer_tuple(chaine):
+
+def recuperer_chiffre(chaine):
     """
-    recupere les valeurs d'un tuple
-    (a condition que le tuple soit rempli de deux valeur numérique)
-    "x,y"
+    recupere les valeurs contenue dans une chaine
     """
     indice_traite=0
-    resultat=[None,None]
-    for i in range(2):
-        resultat[i],indice_traite=recuperer_int(chaine[indice_traite:])
-    return tuple(resultat)
+    resultat=list()
+    indice=0
+    while indice_traite<len(chaine)-1:
+        resultat.append(None)
+        indice_temp=0
+        resultat[indice],indice_temp=recuperer_int(chaine[indice_traite:])
+        indice+=1
+        indice_traite+=indice_temp
+    return resultat
 
-def chargement():
+
+def chargement(niveau):
     """
     cette fonction permet de lire les informations contenue sur un fichier
     et de les renvoyer sous une forme valide pour etre utilisé ailleurs
-    (pour l'instant uniquement du dernier donjon, à l'avenir aussi des
+    (pour l'instant uniquement du def main_handler():
+    # Crée la fenêtre une seule foisdernier donjon, à l'avenir aussi des
     niveaux prédéfinis)
     """
-    fichier_chargement=open("sauvegarde_dernier_donjon","r")
-    fichier_chargement=fichier_chargement.readlines()
+    if niveau<0:
+        fichier_chargement=open("save/sauvegarde_dernier_donjon","r")
+    else:
+        fichier_chargement=open("niveau_donjon"+str(niveau),"r")
+    fichier_chargement=fichier_chargement.readlines() 
+    carte=list()
+    for colonne in range(len(fichier_chargement[0])-1):
+        carte.append([])
     
-    #Lecture des données du joueur (toujours les 2 premières lignes)
-    joueur=[(0,0),1]
     indice_ligne=0
-    joueur[0]=recuperer_tuple(fichier_chargement[0])
-    joueur[1]=int(fichier_chargement[1])
-    indice_ligne+=3
+    aventurier=[(0,0),1]
+    intention=list()
     
-    #Lecture des données de l'intention (uniquement des tuples)
-    intention=[]
+    #recuperation information basique case (sorties)
     while fichier_chargement[indice_ligne]!="\n":
-        intention.append(recuperer_tuple(fichier_chargement[indice_ligne]))
+        for case in fichier_chargement[indice_ligne]:
+            if not(case=="\n"):
+                carte[indice_ligne].append([decode_cases(case),None])
+        indice_ligne+=1
+    
+    #recuperation information aventurier
+    indice_ligne+=1
+    assert fichier_chargement[indice_ligne][0]=="A","une erreur est survenue dans le chargement, vérifier le chargement ou debugger le programme"
+    informations_aventurier=recuperer_chiffre(fichier_chargement[indice_ligne])
+    aventurier[0]=(informations_aventurier[0],informations_aventurier[1])
+    aventurier[1]=informations_aventurier[2]
+    indice_ligne+=2
+    
+    #recuperation de l'intention
+    while fichier_chargement[indice_ligne][0]=="I":
+        intention.append(tuple(recuperer_chiffre(fichier_chargement[indice_ligne])))
         indice_ligne+=1
     indice_ligne+=1
-    
-    #Lectures des informations des case
-    #étape un création d'une carte de base
-    taille_carte=recuperer_tuple(fichier_chargement[indice_ligne])
-    carte=init_carte(taille_carte[0],taille_carte[1])
-    indice_ligne+=1
-    
-    #étape 2 modification de celle ci par les données sauvegardés
-    while fichier_chargement[indice_ligne]!="\n":
-        ligne=fichier_chargement[indice_ligne]
-        indice_traite_sur_ligne=0
-        indice_fin_tuple=0
-        while ligne[indice_fin_tuple]!=" ":
-            indice_fin_tuple+=1
-        i_case,j_case=recuperer_tuple(ligne[:indice_fin_tuple])
-        indice_traite_sur_ligne+=len(str(i_case))+len(str(j_case))+2
-        sortie=[]
-        for i in range(4):
-            sortie.append(ligne[indice_traite_sur_ligne+i]=="T")
-        indice_traite_sur_ligne+=5
-        dragon=None
-        if "N" not in ligne:
-            niveau_dragon,indice_a_oublier=recuperer_int(ligne[indice_traite_sur_ligne:])
-            dragon=int(niveau_dragon)
-        carte[i_case][j_case]=[sortie,dragon]
+
+    #recuperation des dragons
+    while fichier_chargement[indice_ligne][0] in ["D","T"]:
+        information_objet=recuperer_chiffre(fichier_chargement[indice_ligne])
+        carte[information_objet[0]][information_objet[1]][1]=information_objet[2]
         indice_ligne+=1
-    return carte,intention,joueur           
+    return carte,intention,aventurier
+
 
 def a_gagner(carte):
     """
     fonction vérifiant si le nombre de dragon est = à 0
     renvoi un booléen
     """
-    liste_information_dragon=test_dragon(carte)
+    liste_information_dragon,tresors=test_objets(carte)
     return liste_information_dragon[0]==0
         
 def ee(carte,aventurier):
