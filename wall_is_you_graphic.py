@@ -260,6 +260,12 @@ def main(chargement_carte=0):
             intentions = modification_dessin(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
         elif type_ev(evenement) == "ClicDroit":
             intentions = modifier_intention(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
+        elif type_ev(evenement) == "ClicDroit":
+            c=carte[:]
+            y= ordonnee_souris() // taille_case
+            x= abscisse_souris() // taille_case
+            c[x][y][1]=-1
+            modification_dessin(c, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
         
         elif touche(evenement) == "space":
              while len(intentions) > 1 and not game_over:
@@ -295,3 +301,4 @@ def main(chargement_carte=0):
 
 
 # main()  # /!\ DEBUGGAGE // Lance le jeu graphique 
+
