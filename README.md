@@ -74,3 +74,9 @@ Désormais le programme utilise les symbole boite pour sauvegarder les sorties e
 Pour les rendues futur, le chargement peut sélectionner dans niveaux selon les paramètres entrés.
 De même pour sauvegarder les trésors plus facilement la fonction test_dragon à été renommée "test_object" et renvoie des éléments semblable a la dernière, mais prend en compte les éventuels trésors
 
+
+
+Nous avons également commencer à penser aux futur éléments à ajouter, ce qui inclu:
+le pathfinding
+refonte des menues
+editeur de carte (?)
