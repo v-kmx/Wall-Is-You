@@ -90,12 +90,19 @@ def dessiner_case(carte, taille_case, aventurier):
             if not sorties[3]:
                 rectangle(x_init, y_init, x_init + epaisseur, y_init + taille_case, remplissage="white", couleur="black")
 
-            # Dessin des Dragon
+           # Dessin des Dragon
             if dragon is not None:
-                x_centre = x_init + taille_case // 2
-                y_centre = y_init + taille_case // 2
-                image(x_centre, y_centre, "ressources/img/dragon.png", 32, 30)
-                dessiner_niveau((r, c), taille_case, dragon)
+                if dragon>0:
+                    x_centre = x_init + taille_case // 2
+                    y_centre = y_init + taille_case // 2
+                    image(x_centre, y_centre, "ressources/img/dragon.png", 32, 30)
+                    dessiner_niveau((r, c), taille_case, dragon)
+                
+                # Dessin du trésor
+                if dragon<0:
+                    x_centre = x_init + taille_case // 2
+                    y_centre = y_init + taille_case // 2
+                    image(x_centre, y_centre, "ressources/img/tresor.png", 32, 30)
 
             # Dessin de l'Aventurier
             if (r, c) == aventurier[0]:
@@ -285,5 +292,6 @@ def main(chargement_carte=0):
     affiche_game_over(largeur_totale, hauteur_totale)
     attente(3)
     return "quitter"
+
 
 # main()  # /!\ DEBUGGAGE // Lance le jeu graphique 
