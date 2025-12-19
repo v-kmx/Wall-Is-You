@@ -74,7 +74,7 @@ Désormais le programme utilise les symbole boite pour sauvegarder les sorties e
 Pour les rendues futur, le chargement peut sélectionner dans niveaux selon les paramètres entrés.
 De même pour sauvegarder les trésors plus facilement la fonction test_dragon à été renommée "test_object" et renvoie des éléments semblable a la dernière, mais prend en compte les éventuels trésors
 
-
+L'ajout de trésor est un processus simple. Dans notre programme, un trésor est un dragon à niveau négatif, facilitant la sauvegarde d'un paramètre supplémentaire. Le trésor se situe donc dans carte[i][j][1]. Suite à un click_droit, la matrice carte se met à jour de manière a ajouter le nouveau trésor voulu et supprimer un trésor existant si il en existait déjà un. La complexité cette implémentation se trouvait dans la gestion des conditions nécessaires d'apparition d'un trésor (ex: ne pas supprimer un dragon, ne pas apparaitre en dehors de la carte, ne pas apparaitre plusieurs fois…).
 
 Nous avons également commencer à penser aux futur éléments à ajouter, ce qui inclu:
 le pathfinding
