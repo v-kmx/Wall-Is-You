@@ -26,6 +26,7 @@ def dessiner_marge_droite(x0, largeur, hauteur):
         "- Clic gauche :\nPivot de salle",
         "- Clic droit :\nAjout/Supression\nintention",
         "\n- Espace :\nTerminer le tour",
+        "\n- T : Placer/Supprimer\nun trésor",
         "\n- R : Reset le donjon",
         "\n- S : Sauvegarder",
         "\n- E : Easter Egg",
@@ -266,6 +267,7 @@ def main(chargement_carte=0):
         mise_a_jour()
 
         evenement = attend_ev()
+        type_e = type_ev(evenement)
         if (type_ev(evenement) == "Quitte"):
             game_over = True
         elif type_ev(evenement) == "ClicGauche":
@@ -273,32 +275,38 @@ def main(chargement_carte=0):
         elif type_ev(evenement) == "ClicDroit":
             if clic_dans_zone_de_jeu(taille_case, longueur_tableau, hauteur_tableau):
                 intentions = modifier_intention(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
-                x= ordonnee_souris() // taille_case
-                y= abscisse_souris() // taille_case
-                carte=ajouter_tresor(carte,(x,y))
-        
-        elif touche(evenement) == "space":
-             while len(intentions) > 1 and not game_over:
-                game_over = tour_jeu(carte, intentions, aventurier)
-                
-                efface_tout()
-                dessiner_fond_noir_total()
-                
-                dessiner_carte(carte, taille_case, aventurier, intentions)
-                dessiner_marge_droite(largeur_jeu, largeur_totale - largeur_jeu, hauteur_totale)
-                mise_a_jour()
-                
-                sleep(0.2)
-
-        elif touche(evenement) == "r":
-            carte, aventurier = charger_initial(copy_carte, copy_aventurier, taille_case)
-            intentions = [aventurier[0]]
-        elif touche(evenement) == "s":
-            sauvegarde(carte, intentions, aventurier)
-        elif touche(evenement) == "e":
-            carte, aventurier = verif_ee(carte, aventurier, taille_case, intentions)
-        elif touche(evenement) == "Escape":
-            return "quitter"
+        elif type_e == "Touche":
+            nom_touche = touche(evenement)
+            
+            if nom_touche == "t":
+                if clic_dans_zone_de_jeu(taille_case, longueur_tableau, hauteur_tableau):
+                    x_c = ordonnee_souris() // taille_case
+                    y_c = abscisse_souris() // taille_case
+                    carte = ajouter_tresor(carte, (x_c, y_c))
+            
+            elif nom_touche == "space":
+                while len(intentions) > 1 and not game_over:
+                    game_over = tour_jeu(carte, intentions, aventurier)
+                    efface_tout()
+                    dessiner_fond_noir_total()
+                    dessiner_carte(carte, taille_case, aventurier, intentions)
+                    dessiner_marge_droite(largeur_jeu, largeur_totale - largeur_jeu, hauteur_totale)
+                    mise_a_jour()
+                    sleep(0.2)
+            # keybind pour reset
+            elif nom_touche == "r":
+                carte, aventurier = charger_initial(copy_carte, copy_aventurier, taille_case)
+                intentions = [aventurier[0]]
+            # keybind pour sauvegarde
+            elif nom_touche == "s":
+                sauvegarde(carte, intentions, aventurier)
+            # keybind pour... payer vos impots, générer de la choucroute, gérer vos finances
+            # (nan c'est faux c'est juste l'easter egg)
+            elif nom_touche == "e":
+                carte, aventurier = verif_ee(carte, aventurier, taille_case, intentions)
+            # keybinding pour retourner vers le menu principal
+            elif nom_touche == "Escape":
+                return "quitter"
 
         if a_gagner(carte):
             afficher_victoire(largeur_totale, hauteur_totale)
@@ -311,11 +319,3 @@ def main(chargement_carte=0):
 
 
 # main()  # /!\ DEBUGGAGE // Lance le jeu graphique 
-
-
-
-
-
-
-
-
