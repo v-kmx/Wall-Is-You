@@ -271,10 +271,11 @@ def main(chargement_carte=0):
         elif type_ev(evenement) == "ClicGauche":
             intentions = modification_dessin(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
         elif type_ev(evenement) == "ClicDroit":
-            intentions = modifier_intention(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
-            x= ordonnee_souris() // taille_case
-            y= abscisse_souris() // taille_case
-            carte=ajouter_tresor(carte,(x,y))
+            if clic_dans_zone_de_jeu(taille_case, longueur_tableau, hauteur_tableau):
+                intentions = modifier_intention(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
+                x= ordonnee_souris() // taille_case
+                y= abscisse_souris() // taille_case
+                carte=ajouter_tresor(carte,(x,y))
         
         elif touche(evenement) == "space":
              while len(intentions) > 1 and not game_over:
@@ -310,6 +311,7 @@ def main(chargement_carte=0):
 
 
 # main()  # /!\ DEBUGGAGE // Lance le jeu graphique 
+
 
 
 
