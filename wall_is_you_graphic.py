@@ -103,6 +103,7 @@ def dessiner_case(carte, taille_case, aventurier):
                     x_centre = x_init + taille_case // 2
                     y_centre = y_init + taille_case // 2
                     image(x_centre, y_centre, "ressources/img/tresor.png", 32, 30)
+
             # Dessin de l'Aventurier
             if (r, c) == aventurier[0]:
                 lvl = aventurier[1]
