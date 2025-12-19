@@ -82,3 +82,6 @@ Nous avons également commencer à penser aux futur éléments à ajouter, ce qu
 le pathfinding
 refonte des menues
 editeur de carte (?) | note : On a pensé à réutiliser l'interface du jeu Wall is You ainsi que la partie logique mais en la modifiant de manière à pouvoir : 1. Peut-être modifier le grid du jeu (exemple passer d'un 8x8 à un 5x5), 2. Implémenter de nouveau keybinds pour que l'utilisateur puisse, de manière intuitive, ajouter les différents éléments (murs de différents types et orientations, dragons, bonus & trésor), 3. L'enregistrement du niveau créé se ferait avec le système de sauvegarde de notre jeu initial pour l'enregistrer sous forme de fichier qui pourra être ouvert dans Wall is You.
+
+
+oh et oui le trésor c'est tux (le pingouin de linux)
