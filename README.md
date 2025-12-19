@@ -65,3 +65,12 @@ Merci d'avoir lu ce rapport,
 PS : Si je peux vous donner un petit conseil, vous remarquerez certainement la fonction "verif_ee" dans Wall_is_you_graphic", je vous invite à taper sur e, puis le Konami Code (Sans B + A + START soit Entrée // avant d'aller vérifier ce que la fonction "ee" contenu dans Wall_is_you_main fais)
 
 Par PENNETIER-MSIKA Elie, DIOURI-ADEQUIN Noam et KITADI MUNDUNGA Vianney
+
+
+**Second Rendu**
+L'organisation du programme n'a pas beaucoup changé, mais quelques éléments clé ont été modifié ou ajouté:
+tout d'abord pour la partie sauvegarde et chargement:
+Désormais le programme utilise les symbole boite pour sauvegarder les sorties et les positions, pour cela il font appel à encoder_case et decoder_case qui sont des fonctions traduisant le symbole boite en sortie et vice_versas.
+Pour les rendues futur, le chargement peut sélectionner dans niveaux selon les paramètres entrés.
+De même pour sauvegarder les trésors plus facilement la fonction test_dragon à été renommée "test_object" et renvoie des éléments semblable a la dernière, mais prend en compte les éventuels trésors
+
