@@ -211,6 +211,17 @@ def verif_ee(carte, aventurier, taille_case, intentions):
     sleep(1)
     return carte, aventurier
 
+def ajouter_tresor(carte,coordonnee_clic):
+    i,j=coordonnee_clic
+    dragon,tresor=test_objets(carte)
+    if len(tresor)!=0:
+        for tresor_pose in tresor:
+            i_tresor,j_tresor,niveau_tresor=tresor_pose
+            carte[i_tresor][j_tresor]=None
+    carte[i][j]=-1
+    return carte
+    
+
 # Fonction principale
 """Il s'agit de la fonction principale du jeu qui va initialiwser la carte, gérer la boucle
 evenementielle et l'affichage."""
@@ -262,8 +273,7 @@ def main(chargement_carte=0):
             intentions = modifier_intention(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
             x= ordonnee_souris() // taille_case
             y= abscisse_souris() // taille_case
-            carte[x][y][1]=-1
-            modification_dessin(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
+            carte=ajouter_tresor(carte,(x,y))
         
         elif touche(evenement) == "space":
              while len(intentions) > 1 and not game_over:
@@ -299,5 +309,6 @@ def main(chargement_carte=0):
 
 
 # main()  # /!\ DEBUGGAGE // Lance le jeu graphique 
+
 
 
