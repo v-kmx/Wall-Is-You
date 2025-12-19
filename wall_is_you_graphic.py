@@ -218,7 +218,7 @@ def ajouter_tresor(carte,coordonnee_clic):
         for i_tresor_pose in range(1,len(tresor)):
             i_tresor,j_tresor,niveau_tresor=tresor[i_tresor_pose]
             carte[i_tresor][j_tresor][-1]=None
-    carte[i][j]=-1
+    carte[i][j][-1]=-1
     return carte
     
 
@@ -309,6 +309,7 @@ def main(chargement_carte=0):
 
 
 # main()  # /!\ DEBUGGAGE // Lance le jeu graphique 
+
 
 
 
