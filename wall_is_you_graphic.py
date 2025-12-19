@@ -214,9 +214,9 @@ def verif_ee(carte, aventurier, taille_case, intentions):
 def ajouter_tresor(carte,coordonnee_clic):
     i,j=coordonnee_clic
     dragon,tresor=test_objets(carte)
-    if len(tresor)!=0:
-        for tresor_pose in tresor:
-            i_tresor,j_tresor,niveau_tresor=tresor_pose
+    if len(tresor)>1:
+        for i_tresor_pose in range(1,len(tresor)):
+            i_tresor,j_tresor,niveau_tresor=tresor[i_tresor_pose]
             carte[i_tresor][j_tresor]=None
     carte[i][j]=-1
     return carte
@@ -309,6 +309,7 @@ def main(chargement_carte=0):
 
 
 # main()  # /!\ DEBUGGAGE // Lance le jeu graphique 
+
 
 
 
