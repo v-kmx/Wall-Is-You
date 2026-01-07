@@ -28,9 +28,12 @@ def init_menu_principal():
     # Charger Donjon
     rectangle(largeur_fenetre//4, hauteur_fenetre//3 + ecart_btn, 3*largeur_fenetre//4, hauteur_fenetre//3 + ecart_btn + 50, couleur="white", remplissage="white", tag="btn_charger_donjon")
     texte(largeur_fenetre//2, hauteur_fenetre//3 + ecart_btn + 25, "Charger Donjon", couleur="black", ancrage="center", taille=20, police="Helvetica", tag="txt_charger_donjon")
+    # Creer Donjon
+    rectangle(largeur_fenetre//4, hauteur_fenetre//3 + 2*ecart_btn , 3*largeur_fenetre//4, hauteur_fenetre//3 + 2*ecart_btn + 50, couleur="white", remplissage="white", tag="btn_creer_donjon")
+    texte(largeur_fenetre//2,hauteur_fenetre//3 + 2*ecart_btn + 25, "Créer Donjon", couleur="black", ancrage="center", taille=20, police="Helvetica", tag="txt_creer_donjon")
     # Quitter
-    rectangle(largeur_fenetre//4, hauteur_fenetre//3 + 2*ecart_btn, 3*largeur_fenetre//4, hauteur_fenetre//3 + 2*ecart_btn + 50, couleur="white", remplissage="white", tag="btn_quitter")
-    texte(largeur_fenetre//2, hauteur_fenetre//3 + 2*ecart_btn + 25, "Quitter", couleur="black", ancrage="center", taille=20, police="Helvetica", tag="txt_quitter")
+    rectangle(largeur_fenetre//4, hauteur_fenetre//3 + 3*ecart_btn, 3*largeur_fenetre//4, hauteur_fenetre//3 + 3*ecart_btn + 50, couleur="white", remplissage="white", tag="btn_quitter")
+    texte(largeur_fenetre//2, hauteur_fenetre//3 + 3*ecart_btn + 25, "Quitter", couleur="black", ancrage="center", taille=20, police="Helvetica", tag="txt_quitter")
     # Credits
     texte(largeur_fenetre//2, hauteur_fenetre*0.9, "Créé par DIOURI-ADEQUIN Noam,\nPENNETIER-MSIKA Elie et\nKITADI MUNDUNGA Vianney", couleur="white", ancrage="center", taille=10, police="Helvetica", tag="credits")
     # attend_ev()
@@ -60,8 +63,12 @@ def init_menu_principal():
                 efface_tout()
                 return "charger_donjon"
                 # Insertion -> système de chargement
-            # Quitter
+            # Creer Donjon
             elif largeur_fenetre//4 <= x <= 3*largeur_fenetre//4 and hauteur_fenetre//3 + 2*ecart_btn <= y <= hauteur_fenetre//3 + 2*ecart_btn + 50:
+                print("creation d'un nouveau donjon...")
+                return "creer"
+            # Quitter
+            elif largeur_fenetre//4 <= x <= 3*largeur_fenetre//4 and hauteur_fenetre//3 + 3*ecart_btn <= y <= hauteur_fenetre//3 + 3*ecart_btn + 50:
                 return "quitter"
         
 def main_menu():
