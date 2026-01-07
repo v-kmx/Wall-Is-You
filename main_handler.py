@@ -1,6 +1,7 @@
 from fltk import *
 import menu
-import wall_is_you_graphic
+import menu_selection
+import chargement_dernier_niveau
 
 def main_handler():
     # Crée la fenêtre une seule fois
@@ -14,16 +15,18 @@ def main_handler():
             choix = ""
             print(choix)
             efface_tout()                    # on nettoie le menu
-            wall_is_you_graphic.main()       # on lance le jeu
-            efface_tout()                    # retour du jeu → effacer avant de revenir au menu
+            menu_selection.main()       # on lance le jeu
 
         elif choix == "charger_donjon":
-            pass 
+            chargement_dernier_niveau.main()
+            
+        elif choix == "creer":
+            print("en cour de creation") #on devra placer le graphic de l'editeur ici
 
         elif choix == "quitter":
             ferme_fenetre()
             break
-
+        efface_tout()                    # retour du jeu → effacer avant de revenir au menu
 
 if __name__ == "__main__":
     main_handler()
