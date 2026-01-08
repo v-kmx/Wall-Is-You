@@ -412,7 +412,16 @@ def ee(carte,aventurier):
             for j in range(len(carte[0])):
                 position_porte=randint(0,3)
                 carte[i][j][0]=possibilite[position_porte]
-    return carte,aventurier              
+    return carte,aventurier 
+
+def taille_optimale(taille_x_max,taille_y_max,taille_x_tableau,taile_y_tableau):
+    """
+    renvoie la taille maximale pour afficher les cases entièrement dans l'écran
+    """
+    taille=1
+    while taille*taille_x_tableau<taille_x_max and taille*taile_y_tableau<taille_y_max:
+        taille+=1
+    return taille
 """
 def main():
     
