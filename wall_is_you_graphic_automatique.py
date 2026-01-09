@@ -158,10 +158,13 @@ def clic_dans_zone_de_jeu(taille_case, nb_cases_largeur, nb_cases_hauteur):
     return (0 <= x < nb_cases_largeur*taille_case) and (0 <= y < nb_cases_hauteur*taille_case)
 """Gère l'action du clic gauche : Rotation des murs d'une salle et met à jour l'affichage
 après chaque modification."""
-def modification_dessin(carte, taille_case, aventurier, intention, nb_w, nb_h):
+def modification_dessin(carte, taille_case, aventurier, intention, nb_w, nb_h, mode_tour_unique, case_visite):
     if not clic_dans_zone_de_jeu(taille_case, nb_w, nb_h): return intention
     coord = (ordonnee_souris() // taille_case, abscisse_souris() // taille_case)
+    if mode_tour_unique and coord in case_visite:
+        return intention,case_visite
     modifier_case(coord, carte)
+    case_visite.add(coord)
     chemin=pathfind(carte, aventurier)
     if chemin:
         intention=chemin
@@ -169,7 +172,7 @@ def modification_dessin(carte, taille_case, aventurier, intention, nb_w, nb_h):
         intention=[aventurier[0]]
     dessiner_fond_noir_total() 
     dessiner_carte(carte, taille_case, aventurier, intention)
-    return intention
+    return intention, case_visite
 """Gère l'action du clic droit : Ajout/supression d'une étape au déplacement (intention).
     Met à jour l'affichage après modification"""
 def modifier_intention(carte, taille_case, aventurier, intention, nb_w, nb_h):
@@ -355,7 +358,7 @@ def rec_pathfind(M, aventurier, coord):
 # Fonction principale
 """Il s'agit de la fonction principale du jeu qui va initialiwser la carte, gérer la boucle
 evenementielle et l'affichage."""
-def main(chargement_carte=0):
+def main(chargement_carte=0, mode_tour_unique=False):
     game_over = False
 
     if not chargement_carte:
@@ -384,6 +387,7 @@ def main(chargement_carte=0):
     mise_a_jour() 
 
     copy_carte, copy_aventurier = copy_initial(carte, aventurier)
+    case_modifie=set()
 
     while not game_over:
         efface_tout()
@@ -399,7 +403,7 @@ def main(chargement_carte=0):
         if (type_ev(evenement) == "Quitte"):
             game_over = True
         elif type_ev(evenement) == "ClicGauche":
-            intentions = modification_dessin(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
+            intentions, case_modifie = modification_dessin(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau, mode_tour_unique, case_modifie)
         elif type_ev(evenement) =="ClicDroit":
             if clic_dans_zone_de_jeu(taille_case, longueur_tableau, hauteur_tableau):
                     x=ordonnee_souris()//taille_case
