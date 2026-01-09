@@ -225,7 +225,7 @@ def sauvegarde(carte,intention,aventurier,nb_tresor):
     la taille de la carte
     l'intention
     """
-    fichier_sauvegarde=open("save/sauvegarde_dernier_donjon","w")
+    fichier_sauvegarde=open("save/sauvegarde_dernier_donjon","w", encoding="utf-8")
     carte_encode=encode_case(carte)
     for ligne in carte_encode:
         for case in ligne:
@@ -309,7 +309,7 @@ def chargement(niveau):
     niveaux prédéfinis)
     """
     if niveau<0:
-        fichier_chargement=open("save/sauvegarde_dernier_donjon","r")
+        fichier_chargement=open("save/sauvegarde_dernier_donjon","r", encoding="utf-8")
     else:
         fichier_chargement=open("level/niveau"+str(niveau),"r")
     fichier_chargement=fichier_chargement.readlines() 
@@ -378,7 +378,7 @@ def ee(carte,aventurier):
     x,y=aventurier[0]
     if evenement==0:
         for i in range(len(carte)):
-            for j in range(len(carte[0])):
+            for j in range(len(carte[0])):\u2561
                 carte[i][j][1]=1
         carte[x][y][1]=None
         if x!=len(carte)//2 or y!=len(carte[0])//2:
