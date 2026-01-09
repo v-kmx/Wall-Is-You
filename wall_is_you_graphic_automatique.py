@@ -72,13 +72,10 @@ def dessiner_case(carte, taille_case, aventurier):
     colonnes = len(carte[0]) if lignes > 0 else 0
     epaisseur = int(taille_case * 0.1)
 
-
-    print(carte)
     for r in range(lignes):
         for c in range(colonnes):
             x_init = c * taille_case
             y_init = r * taille_case
-            print(r,c,lignes,colonnes)
             case = carte[r][c]
             sorties = case[0]
             dragon = case[1]
