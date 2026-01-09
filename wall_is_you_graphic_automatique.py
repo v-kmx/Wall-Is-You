@@ -156,7 +156,7 @@ def clic_dans_zone_de_jeu(taille_case, nb_cases_largeur, nb_cases_hauteur):
 """Gère l'action du clic gauche : Rotation des murs d'une salle et met à jour l'affichage
 après chaque modification."""
 def modification_dessin(carte, taille_case, aventurier, intention, nb_w, nb_h, mode_tour_unique, case_visite):
-    if not clic_dans_zone_de_jeu(taille_case, nb_w, nb_h): return intention
+    if not clic_dans_zone_de_jeu(taille_case, nb_w, nb_h): return intention,case_visite
     coord = (ordonnee_souris() // taille_case, abscisse_souris() // taille_case)
     if mode_tour_unique and coord in case_visite:
         return intention,case_visite
