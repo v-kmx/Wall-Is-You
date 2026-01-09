@@ -1,5 +1,5 @@
 # Wall-Is-You
-A "Dungeon &amp; Dragons" rogue-like game project entirely made in Python w/ FLTK  
+A rogue-like game project based on "Baba is You" entirely made in Python w/ FLTK  
 
 SAE 1.01: Implémentation d'un besoin client | Rendu N°1
 Projet : Wall Is You
@@ -85,3 +85,4 @@ editeur de carte (?) | note : On a pensé à réutiliser l'interface du jeu Wall
 
 
 oh et oui le trésor c'est tux (le pingouin de linux)
+**Rendu Final**
