@@ -26,7 +26,6 @@ def dessiner_marge_droite(x0, largeur, hauteur):
         "- Clic gauche :\nPivot de salle",
         "- Clic droit :\nAjout/Supression\nintention",
         "\n- Espace :\nTerminer le tour",
-        "\n- T : Placer/Supprimer\nun trésor",
         "\n- R : Reset le donjon",
         "\n- S : Sauvegarder",
         "\n- E : Easter Egg",
@@ -66,6 +65,8 @@ def dessiner_niveau(case, taille_case, niveau):
     y_dec = int(taille_case * 0.625 // 2)
     rectangle(x_center + x_dec, y_center - y_dec, x_center + x_dec * 2, y_center, "black", "white")
     texte(x_center + x_dec + 1, y_center - y_dec + 1.5, str(niveau), "black", "nw", "helvetica", 8)
+    
+    
 """Cette fonction va dans un premier temps parcourir la grille afin de dessiner le contenu de
 chaque case sur le grillage"""
 def dessiner_case(carte, taille_case, aventurier):
@@ -82,28 +83,22 @@ def dessiner_case(carte, taille_case, aventurier):
             dragon = case[1]
 
             # Dessin des Murs
-            if not sorties[0]:
-                rectangle(x_init, y_init, x_init + taille_case, y_init + epaisseur, remplissage="white", couleur="black")
-            if not sorties[1]:
-                rectangle(x_init + taille_case - epaisseur, y_init, x_init + taille_case, y_init + taille_case, remplissage="white", couleur="black")
-            if not sorties[2]:
-                rectangle(x_init, y_init + taille_case - epaisseur, x_init + taille_case, y_init + taille_case, remplissage="white", couleur="black")
-            if not sorties[3]:
+            if not sorties[0]:  # gauche
                 rectangle(x_init, y_init, x_init + epaisseur, y_init + taille_case, remplissage="white", couleur="black")
+            if not sorties[1]:  # haut
+                rectangle(x_init, y_init, x_init + taille_case, y_init + epaisseur, remplissage="white", couleur="black")
+            if not sorties[2]:  # bas
+                rectangle(x_init, y_init + taille_case - epaisseur, x_init + taille_case, y_init + taille_case, remplissage="white", couleur="black")
+            if not sorties[3]:  # droite
+                rectangle(x_init + taille_case - epaisseur, y_init, x_init + taille_case, y_init + taille_case, remplissage="white", couleur="black")
 
-           # Dessin des Dragon
+
+            # Dessin des Dragon
             if dragon is not None:
-                if dragon>0:
-                    x_centre = x_init + taille_case // 2
-                    y_centre = y_init + taille_case // 2
-                    image(x_centre, y_centre, "ressources/img/dragon.png", 32, 30)
-                    dessiner_niveau((r, c), taille_case, dragon)
-                
-                # Dessin du trésor
-                if dragon<0:
-                    x_centre = x_init + taille_case // 2
-                    y_centre = y_init + taille_case // 2
-                    image(x_centre, y_centre, "ressources/img/tresor.png", 32, 30)
+                x_centre = x_init + taille_case // 2
+                y_centre = y_init + taille_case // 2
+                image(x_centre, y_centre, "ressources/img/dragon.png", 32, 30)
+                dessiner_niveau((r, c), taille_case, dragon)
 
             # Dessin de l'Aventurier
             if (r, c) == aventurier[0]:
@@ -112,6 +107,8 @@ def dessiner_case(carte, taille_case, aventurier):
                 y_centre = y_init + taille_case // 2
                 image(x_centre, y_centre, "ressources/img/hero.png", 26, 34)
                 dessiner_niveau((r, c), taille_case, lvl)
+                
+                
 """affiche l'ensemble de l'intention présent dans la liste_intention"""
 def dessiner_intention(carte, taille_case, intention):
     if len(intention) <= 1: return
@@ -124,6 +121,8 @@ def dessiner_intention(carte, taille_case, intention):
         y = r * taille_case + taille_case // 2
         ligne(x_prev, y_prev, x, y, "red", 2)
         x_prev, y_prev = x, y
+        
+        
 """Dessine une carte sous forme de grille en fonction d'une taille de case donnée."""
 def dessiner_carte(carte, taille_case, aventurier, intention):
     lignes = len(carte)
@@ -153,22 +152,28 @@ def clic_dans_zone_de_jeu(taille_case, nb_cases_largeur, nb_cases_hauteur):
     x = abscisse_souris()
     y = ordonnee_souris()
     return (0 <= x < nb_cases_largeur*taille_case) and (0 <= y < nb_cases_hauteur*taille_case)
+
+
 """Gère l'action du clic gauche : Rotation des murs d'une salle et met à jour l'affichage
 après chaque modification."""
 def modification_dessin(carte, taille_case, aventurier, intention, nb_w, nb_h):
     if not clic_dans_zone_de_jeu(taille_case, nb_w, nb_h): return intention
     coord = (ordonnee_souris() // taille_case, abscisse_souris() // taille_case)
+    print("\n",carte[coord[0]][coord[1]])
     modifier_case(coord, carte)
+    print(carte[coord[0]][coord[1]])
     if len(intention) > 1:
         intention = verif_intention_global(aventurier, carte, intention)
     efface_tout()
     dessiner_fond_noir_total() 
     dessiner_carte(carte, taille_case, aventurier, intention)
     return intention
+
+
 """Gère l'action du clic droit : Ajout/supression d'une étape au déplacement (intention).
     Met à jour l'affichage après modification"""
 def modifier_intention(carte, taille_case, aventurier, intention, nb_w, nb_h):
-    if not clic_dans_zone_de_jeu(taille_case, nb_w, nb_h): return intention
+    if not clic_dans_zone_de_jeu(taille_case, nb_w, nb_h) : return intention
     coord = (ordonnee_souris() // taille_case, abscisse_souris() // taille_case)
     ajouter_intention(coord, carte, intention)
     efface_tout()
@@ -185,6 +190,8 @@ def affiche_game_over(largeur_totale, hauteur_totale):
     h_win = hauteur_fenetre()
     texte(l_win / 2, h_win / 2, "Game Over", "red", "center", "helvetica", 38)
     mise_a_jour()
+    
+    
 """Affiche un écran de Victoire lorsque le joueur a abattu tous les dragons"""
 def afficher_victoire(largeur_totale, hauteur_totale):
     efface_tout()
@@ -194,12 +201,16 @@ def afficher_victoire(largeur_totale, hauteur_totale):
     texte(l_win / 2, h_win / 2, "You win!", "green", "center", "helvetica", 38)
     mise_a_jour()
 
+
 # Ah! Voici l'Easter Egg!!! (Ne le dites à personne)
 """Ceci est une partie bonus avec un Easter Egg étant le Konami Code. Lorsque le joueur
 entre ce dernier, l'aventurier recevra un bonus"""
 def verif_ee(carte, aventurier, taille_case, intentions):
     dessiner_carte(carte, taille_case, (aventurier[0], 0), intentions)
     dernier_evenement = []
+    print("Veuillez entrez le code")
+    #
+    #le debut du konami code ci dessous
     code = ["Up", "Up", "Down", "Down", "Left", "Right", "Left", "Right"]
     for _ in range(len(code)):
         ev = attend_ev()
@@ -212,24 +223,11 @@ def verif_ee(carte, aventurier, taille_case, intentions):
     sleep(1)
     return carte, aventurier
 
-def ajouter_tresor(carte,coordonnee_clic):
-    i,j=coordonnee_clic
-    dragon,tresor=test_objets(carte)
-    if len(tresor)>1:
-        for i_tresor_pose in range(1,len(tresor)):
-            i_tresor,j_tresor,niveau_tresor=tresor[i_tresor_pose]
-            carte[i_tresor][j_tresor][-1]=None
-    if carte[i][j][1]==None:
-        carte[i][j][-1]=-1
-    return carte
-    
-
 # Fonction principale
-"""Il s'agit de la fonction principale du jeu qui va initialiwser la carte, gérer la boucle
+"""Il s'agit de la fonction principale du jeu qui va initialiser la carte, gérer la boucle
 evenementielle et l'affichage."""
-def main(chargement_carte=0):
+def main(chargement_carte=0,mode_tour_unique=False):
     game_over = False
-    taille_case = 40 
 
     if not chargement_carte:
         hauteur_tableau = 8
@@ -238,11 +236,14 @@ def main(chargement_carte=0):
         aventurier = init_aventurier()
         init_dragon(carte)
         intentions = [aventurier[0]]
+        nb_tresor=0
+        
     else:
-        carte, intentions, aventurier = chargement()
+        carte, intentions, aventurier, nb_tresor = chargement(chargement_carte)
         hauteur_tableau = len(carte)
         longueur_tableau = hauteur_tableau
-
+    
+    taille_case= taille_optimale(largeur_fenetre()//2,hauteur_fenetre(),longueur_tableau,hauteur_tableau)
     largeur_jeu = longueur_tableau * taille_case
     hauteur_jeu = hauteur_tableau * taille_case
     largeur_totale = int(largeur_jeu * (1 + marge_droite))
@@ -252,7 +253,7 @@ def main(chargement_carte=0):
     dessiner_fond_noir_total()
 
     dessiner_carte(carte, taille_case, aventurier, intentions)
-    dessiner_marge_droite(largeur_jeu, largeur_totale - largeur_jeu, hauteur_totale)
+    dessiner_marge_droite(largeur_fenetre()//2, largeur_totale - (largeur_fenetre()//2), hauteur_totale)
     mise_a_jour() 
 
     copy_carte, copy_aventurier = copy_initial(carte, aventurier)
@@ -262,60 +263,48 @@ def main(chargement_carte=0):
         dessiner_fond_noir_total()
         
         dessiner_carte(carte, taille_case, aventurier, intentions)
-        dessiner_marge_droite(largeur_jeu, largeur_totale - largeur_jeu, hauteur_totale)
+        dessiner_marge_droite(largeur_fenetre()//2, largeur_totale - (largeur_fenetre()//2), hauteur_totale)
         
         mise_a_jour()
 
         evenement = attend_ev()
-        type_e = type_ev(evenement)
         if (type_ev(evenement) == "Quitte"):
             game_over = True
         elif type_ev(evenement) == "ClicGauche":
             intentions = modification_dessin(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
         elif type_ev(evenement) == "ClicDroit":
-            if clic_dans_zone_de_jeu(taille_case, longueur_tableau, hauteur_tableau):
-                intentions = modifier_intention(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
-        elif type_e == "Touche":
-            nom_touche = touche(evenement)
-            
-            if nom_touche == "t":
-                if clic_dans_zone_de_jeu(taille_case, longueur_tableau, hauteur_tableau):
-                    x_c = ordonnee_souris() // taille_case
-                    y_c = abscisse_souris() // taille_case
-                    carte = ajouter_tresor(carte, (x_c, y_c))
-            
-            elif nom_touche == "space":
-                while len(intentions) > 1 and not game_over:
-                    game_over = tour_jeu(carte, intentions, aventurier)
-                    efface_tout()
-                    dessiner_fond_noir_total()
-                    dessiner_carte(carte, taille_case, aventurier, intentions)
-                    dessiner_marge_droite(largeur_jeu, largeur_totale - largeur_jeu, hauteur_totale)
-                    mise_a_jour()
-                    sleep(0.2)
-            # keybind pour reset
-            elif nom_touche == "r":
-                carte, aventurier = charger_initial(copy_carte, copy_aventurier, taille_case)
-                intentions = [aventurier[0]]
-            # keybind pour sauvegarde
-            elif nom_touche == "s":
-                sauvegarde(carte, intentions, aventurier)
-            # keybind pour... payer vos impots, générer de la choucroute, gérer vos finances
-            # (nan c'est faux c'est juste l'easter egg)
-            elif nom_touche == "e":
-                carte, aventurier = verif_ee(carte, aventurier, taille_case, intentions)
-            # keybinding pour retourner vers le menu principal
-            elif nom_touche == "Escape":
-                return "quitter"
+            intentions = modifier_intention(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
+        
+        elif touche(evenement) == "space":
+             while len(intentions) > 1 and not game_over:
+                game_over = tour_jeu(carte, intentions, aventurier)
+                
+                efface_tout()
+                dessiner_fond_noir_total()
+                
+                dessiner_carte(carte, taille_case, aventurier, intentions)
+                dessiner_marge_droite(largeur_fenetre()//2, largeur_totale - (largeur_fenetre()//2), hauteur_totale)
+                mise_a_jour()
+                
+                sleep(0.2)
 
+        elif touche(evenement) == "r":
+            carte, aventurier = charger_initial(copy_carte, copy_aventurier, taille_case)
+            intentions = [aventurier[0]]
+        elif touche(evenement) == "s":
+            sauvegarde(carte, intentions, aventurier, nb_tresor)
+        elif touche(evenement) == "e":
+            carte, aventurier = verif_ee(carte, aventurier, taille_case, intentions)
+        elif touche(evenement) == "Escape":
+            return "quitter"
+                
         if a_gagner(carte):
             afficher_victoire(largeur_totale, hauteur_totale)
             attente(5)
             return "quitter"
-
+    
     affiche_game_over(largeur_totale, hauteur_totale)
     attente(3)
     return "quitter"
-
 
 # main()  # /!\ DEBUGGAGE // Lance le jeu graphique 
