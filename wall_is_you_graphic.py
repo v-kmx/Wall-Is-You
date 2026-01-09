@@ -156,18 +156,19 @@ def clic_dans_zone_de_jeu(taille_case, nb_cases_largeur, nb_cases_hauteur):
 
 """Gère l'action du clic gauche : Rotation des murs d'une salle et met à jour l'affichage
 après chaque modification."""
-def modification_dessin(carte, taille_case, aventurier, intention, nb_w, nb_h):
+def modification_dessin(carte, taille_case, aventurier, intention, nb_w, nb_h, mode_tour_unique,case_modifie):
     if not clic_dans_zone_de_jeu(taille_case, nb_w, nb_h): return intention
     coord = (ordonnee_souris() // taille_case, abscisse_souris() // taille_case)
-    print("\n",carte[coord[0]][coord[1]])
+    if mode_tour_unique and coord in case_modifie:
+        return intention,case_modifie
     modifier_case(coord, carte)
-    print(carte[coord[0]][coord[1]])
     if len(intention) > 1:
         intention = verif_intention_global(aventurier, carte, intention)
+    case_modifie.add(coord)
     efface_tout()
     dessiner_fond_noir_total() 
     dessiner_carte(carte, taille_case, aventurier, intention)
-    return intention
+    return intention,case_modifie
 
 
 """Gère l'action du clic droit : Ajout/supression d'une étape au déplacement (intention).
@@ -257,6 +258,8 @@ def main(chargement_carte=0,mode_tour_unique=False):
     mise_a_jour() 
 
     copy_carte, copy_aventurier = copy_initial(carte, aventurier)
+    
+    case_modifie=set()
 
     while not game_over:
         efface_tout()
@@ -271,7 +274,7 @@ def main(chargement_carte=0,mode_tour_unique=False):
         if (type_ev(evenement) == "Quitte"):
             game_over = True
         elif type_ev(evenement) == "ClicGauche":
-            intentions = modification_dessin(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
+            intentions,case_modifie = modification_dessin(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau, mode_tour_unique, case_modifie)
         elif type_ev(evenement) == "ClicDroit":
             intentions = modifier_intention(carte, taille_case, aventurier, intentions, longueur_tableau, hauteur_tableau)
         
