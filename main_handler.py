@@ -2,6 +2,7 @@ from fltk import *
 import menu
 import menu_selection
 import chargement_dernier_niveau
+import wiy_editor_graphic 
 
 def main_handler():
     # Crée la fenêtre une seule fois
@@ -10,7 +11,7 @@ def main_handler():
     while True:
         choix = menu.init_menu_principal()   # récupère le choix du menu
         print(choix)
-
+    
         if choix == "nouvelle_partie":
             choix = ""
             print(choix)
@@ -20,8 +21,9 @@ def main_handler():
         elif choix == "charger_donjon":
             chargement_dernier_niveau.main()
             
-        elif choix == "creer":
-            print("en cour de creation") #on devra placer le graphic de l'editeur ici
+        elif choix == "editeur":
+            print("lancement du mode éditeur") #on lance le mode editeur
+            wiy_editor_graphic.main_editeur()
 
         elif choix == "quitter":
             ferme_fenetre()

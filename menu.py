@@ -1,6 +1,6 @@
 from fltk import *
 from wall_is_you_graphic import *
-
+from wiy_editor_graphic import *
 hauteur_fenetre = 520
 largeur_fenetre = 520
 ecart_btn = hauteur_fenetre // 8
@@ -28,9 +28,9 @@ def init_menu_principal():
     # Charger Donjon
     rectangle(largeur_fenetre//4, hauteur_fenetre//3 + ecart_btn, 3*largeur_fenetre//4, hauteur_fenetre//3 + ecart_btn + 50, couleur="white", remplissage="white", tag="btn_charger_donjon")
     texte(largeur_fenetre//2, hauteur_fenetre//3 + ecart_btn + 25, "Charger Donjon", couleur="black", ancrage="center", taille=20, police="Helvetica", tag="txt_charger_donjon")
-    # Creer Donjon
-    rectangle(largeur_fenetre//4, hauteur_fenetre//3 + 2*ecart_btn , 3*largeur_fenetre//4, hauteur_fenetre//3 + 2*ecart_btn + 50, couleur="white", remplissage="white", tag="btn_creer_donjon")
-    texte(largeur_fenetre//2,hauteur_fenetre//3 + 2*ecart_btn + 25, "Créer Donjon", couleur="black", ancrage="center", taille=20, police="Helvetica", tag="txt_creer_donjon")
+    # editeur Donjon
+    rectangle(largeur_fenetre//4, hauteur_fenetre//3 + 2*ecart_btn , 3*largeur_fenetre//4, hauteur_fenetre//3 + 2*ecart_btn + 50, couleur="white", remplissage="white", tag="btn_editeur_donjon")
+    texte(largeur_fenetre//2,hauteur_fenetre//3 + 2*ecart_btn + 25, "Mode Editeur", couleur="black", ancrage="center", taille=20, police="Helvetica", tag="txt_editeur_donjon")
     # Quitter
     rectangle(largeur_fenetre//4, hauteur_fenetre//3 + 3*ecart_btn, 3*largeur_fenetre//4, hauteur_fenetre//3 + 3*ecart_btn + 50, couleur="white", remplissage="white", tag="btn_quitter")
     texte(largeur_fenetre//2, hauteur_fenetre//3 + 3*ecart_btn + 25, "Quitter", couleur="black", ancrage="center", taille=20, police="Helvetica", tag="txt_quitter")
@@ -63,10 +63,10 @@ def init_menu_principal():
                 efface_tout()
                 return "charger_donjon"
                 # Insertion -> système de chargement
-            # Creer Donjon
+            # editeur Donjon
             elif largeur_fenetre//4 <= x <= 3*largeur_fenetre//4 and hauteur_fenetre//3 + 2*ecart_btn <= y <= hauteur_fenetre//3 + 2*ecart_btn + 50:
                 print("creation d'un nouveau donjon...")
-                return "creer"
+                return "editeur"
             # Quitter
             elif largeur_fenetre//4 <= x <= 3*largeur_fenetre//4 and hauteur_fenetre//3 + 3*ecart_btn <= y <= hauteur_fenetre//3 + 3*ecart_btn + 50:
                 return "quitter"

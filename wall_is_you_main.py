@@ -310,10 +310,13 @@ def chargement(niveau):
     """
     if niveau<0:
         fichier_chargement=open("save/sauvegarde_dernier_donjon","r", encoding="utf-8")
+    elif niveau=='c':
+        fichier_chargement=open("custom/custom_niveau","r", encoding="utf-8")
     else:
-        fichier_chargement=open("level/niveau"+str(niveau),"r")
+        fichier_chargement=open("level/niveau"+str(niveau),"r", encoding="utf-8")
     fichier_chargement=fichier_chargement.readlines() 
     carte=list()
+    
     
     indice_ligne=0
     while fichier_chargement[indice_ligne] != "\n":
@@ -378,7 +381,7 @@ def ee(carte,aventurier):
     x,y=aventurier[0]
     if evenement==0:
         for i in range(len(carte)):
-            for j in range(len(carte[0])):\u2561
+            for j in range(len(carte[0])):
                 carte[i][j][1]=1
         carte[x][y][1]=None
         if x!=len(carte)//2 or y!=len(carte[0])//2:
